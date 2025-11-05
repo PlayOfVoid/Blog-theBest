@@ -140,3 +140,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'blog:index'
 LOGOUT_REDIRECT_URL = 'blog:index'
+
+# Email settings
+# Для разработки - вывод в консоль
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Для production раскомментируйте и настройте:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # или другой SMTP сервер
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your-app-password'
+
+DEFAULT_FROM_EMAIL = 'TechBlog <noreply@techblog.com>'
+SITE_URL = 'http://127.0.0.1:8000'  # Для production измените на реальный URL
