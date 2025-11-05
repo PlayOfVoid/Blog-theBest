@@ -1,0 +1,261 @@
+/* ===== Кастомная админка с темами ===== */
+
+/* Светлая тема (по умолчанию) */
+[data-admin-theme="light"] {
+    --admin-bg: #ffffff;
+    --admin-bg-secondary: #f8f9fa;
+    --admin-text: #212529;
+    --admin-text-secondary: #6c757d;
+    --admin-border: #dee2e6;
+    --admin-primary: #0d6efd;
+    --admin-primary-hover: #0b5ed7;
+    --admin-header-bg: #417690;
+    --admin-header-text: #ffffff;
+}
+
+/* Темная тема */
+[data-admin-theme="dark"] {
+    --admin-bg: #1a1a1a;
+    --admin-bg-secondary: #2d2d2d;
+    --admin-text: #e4e4e4;
+    --admin-text-secondary: #a0a0a0;
+    --admin-border: #404040;
+    --admin-primary: #4c8fff;
+    --admin-primary-hover: #3d7fe6;
+    --admin-header-bg: #2d3e50;
+    --admin-header-text: #ffffff;
+}
+
+/* Кибер тема */
+[data-admin-theme="cyber"] {
+    --admin-bg: #0a0e27;
+    --admin-bg-secondary: #1a1f3a;
+    --admin-text: #00ffff;
+    --admin-text-secondary: #00cccc;
+    --admin-border: #00ffff;
+    --admin-primary: #ff00ff;
+    --admin-primary-hover: #cc00cc;
+    --admin-header-bg: #1a1f3a;
+    --admin-header-text: #00ffff;
+}
+
+/* Применяем темы */
+[data-admin-theme] body {
+    background-color: var(--admin-bg) !important;
+    color: var(--admin-text) !important;
+}
+
+[data-admin-theme] #header {
+    background-color: var(--admin-header-bg) !important;
+    color: var(--admin-header-text) !important;
+}
+
+[data-admin-theme] .admin-branding {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+[data-admin-theme] .admin-user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+[data-admin-theme] .admin-username {
+    color: var(--admin-header-text);
+    font-weight: 500;
+}
+
+[data-admin-theme] .admin-theme-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--admin-header-text);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+[data-admin-theme] .admin-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+[data-admin-theme] .theme-icon {
+    font-size: 1.2rem;
+}
+
+/* Контент */
+[data-admin-theme] #content {
+    background-color: var(--admin-bg) !important;
+    color: var(--admin-text) !important;
+}
+
+[data-admin-theme] .module {
+    background-color: var(--admin-bg-secondary) !important;
+    border: 1px solid var(--admin-border) !important;
+}
+
+[data-admin-theme] .module h2,
+[data-admin-theme] .module h3,
+[data-admin-theme] caption {
+    background-color: var(--admin-primary) !important;
+    color: white !important;
+}
+
+[data-admin-theme] table {
+    background-color: var(--admin-bg-secondary) !important;
+}
+
+[data-admin-theme] thead th {
+    background-color: var(--admin-bg-secondary) !important;
+    color: var(--admin-text) !important;
+    border-bottom: 2px solid var(--admin-border) !important;
+}
+
+[data-admin-theme] td,
+[data-admin-theme] th {
+    border-bottom: 1px solid var(--admin-border) !important;
+    color: var(--admin-text) !important;
+}
+
+[data-admin-theme] tr:hover {
+    background-color: var(--admin-bg) !important;
+}
+
+/* Формы */
+[data-admin-theme] input[type="text"],
+[data-admin-theme] input[type="password"],
+[data-admin-theme] input[type="email"],
+[data-admin-theme] input[type="url"],
+[data-admin-theme] input[type="number"],
+[data-admin-theme] textarea,
+[data-admin-theme] select {
+    background-color: var(--admin-bg) !important;
+    color: var(--admin-text) !important;
+    border: 1px solid var(--admin-border) !important;
+}
+
+[data-admin-theme] .vTextField:focus,
+[data-admin-theme] .vURLField:focus,
+[data-admin-theme] .vLargeTextField:focus,
+[data-admin-theme] .vEmailField:focus {
+    border-color: var(--admin-primary) !important;
+}
+
+/* Кнопки */
+[data-admin-theme] .button,
+[data-admin-theme] input[type="submit"],
+[data-admin-theme] input[type="button"],
+[data-admin-theme] .submit-row input {
+    background-color: var(--admin-primary) !important;
+    border: none !important;
+    color: white !important;
+}
+
+[data-admin-theme] .button:hover,
+[data-admin-theme] input[type="submit"]:hover {
+    background-color: var(--admin-primary-hover) !important;
+}
+
+/* Ссылки */
+[data-admin-theme] a {
+    color: var(--admin-primary) !important;
+}
+
+[data-admin-theme] a:hover {
+    color: var(--admin-primary-hover) !important;
+}
+
+/* Боковая панель */
+[data-admin-theme] #content-related {
+    background-color: var(--admin-bg-secondary) !important;
+}
+
+[data-admin-theme] .module ul {
+    background-color: var(--admin-bg) !important;
+}
+
+/* Кибер эффекты */
+[data-admin-theme="cyber"] * {
+    text-shadow: 0 0 2px currentColor;
+}
+
+[data-admin-theme="cyber"] #header {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+[data-admin-theme="cyber"] .module {
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+    border: 1px solid var(--admin-border) !important;
+}
+
+[data-admin-theme="cyber"] .button,
+[data-admin-theme="cyber"] input[type="submit"] {
+    background: linear-gradient(135deg, #ff00ff, #00ffff) !important;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+    }
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+    [data-admin-theme] .admin-branding {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    [data-admin-theme] #site-name {
+        font-size: 1.2rem;
+    }
+    
+    [data-admin-theme] .admin-user-info {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    [data-admin-theme] #content {
+        padding: 10px;
+    }
+    
+    [data-admin-theme] table {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 576px) {
+    [data-admin-theme] .admin-logo {
+        display: none;
+    }
+    
+    [data-admin-theme] .admin-username {
+        font-size: 0.875rem;
+    }
+}
+
+/* Планшеты */
+@media (min-width: 768px) and (max-width: 1024px) {
+    [data-admin-theme] #header {
+        padding: 15px 20px;
+    }
+    
+    [data-admin-theme] #content {
+        padding: 20px;
+    }
+    
+    [data-admin-theme] table {
+        font-size: 0.9rem;
+    }
+}
+
