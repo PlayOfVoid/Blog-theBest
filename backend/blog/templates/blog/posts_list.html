@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Все посты - TechBlog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Все посты</h1>
+        {% if user.is_authenticated %}
+            <a href="{% url 'blog:create_post' %}" class="btn btn-primary">Создать пост</a>
+        {% endif %}
+    </div>
+
+    {% if page_obj %}
+        <div class="posts-list">
+            {% for post in page_obj %}
+                <article class="post-item">
+                    <div class="post-item-header">
+                        <div class="post-author">
+                            {% if post.author.profile.avatar %}
+                                <img src="{{ post.author.profile.avatar.url }}" alt="{{ post.author.username }}" class="avatar-md">
+                            {% else %}
+                                <span class="avatar-placeholder avatar-md">{{ post.author.username.0|upper }}</span>
+                            {% endif %}
+                            <div class="author-info">
+                                <a href="{% url 'users:profile' post.author.username %}" class="author-name">{{ post.author.username }}</a>
+                                <span class="post-date">{{ post.created_at|date:"d F Y, H:i" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="post-item-body">
+                        <h2 class="post-title">
+                            <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+                        </h2>
+                        <p class="post-excerpt">{{ post.content|truncatewords:50|striptags }}</p>
+                        
+                        {% if post.tags.all %}
+                            <div class="post-tags">
+                                {% for tag in post.tags.all %}
+                                    <a href="{% url 'blog:tag_posts' tag.slug %}" class="tag-mini">{{ tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="post-item-footer">
+                        <div class="post-stats">
+                            <span class="stat">
+                                <span class="stat-icon">👁</span> {{ post.views }}
+                            </span>
+                            <span class="stat">
+                                <span class="stat-icon">❤️</span> {{ post.total_likes }}
+                            </span>
+                            <span class="stat">
+                                <span class="stat-icon">💬</span> {{ post.comments.count }}
+                            </span>
+                        </div>
+                        <a href="{% url 'blog:post_detail' post.pk %}" class="btn btn-outline btn-sm">Читать далее →</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        {% if page_obj.has_other_pages %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="pagination-btn">« Первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn">‹ Предыдущая</a>
+                {% endif %}
+                
+                <span class="pagination-info">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn">Следующая ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-btn">Последняя »</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="empty-state">
+            <p>Пока нет постов</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

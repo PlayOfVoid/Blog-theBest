@@ -1,0 +1,253 @@
+/* ===== Светлая тема (по умолчанию) ===== */
+[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --hover-bg: #e9ecef;
+    
+    --primary-color: #0d6efd;
+    --primary-hover: #0b5ed7;
+    --secondary-color: #6c757d;
+    
+    --success-bg: #d1e7dd;
+    --success-color: #0f5132;
+    --danger-bg: #f8d7da;
+    --danger-color: #842029;
+    --info-bg: #cfe2ff;
+    --info-color: #084298;
+    
+    --danger-color: #dc3545;
+    --danger-hover: #bb2d3b;
+}
+
+/* ===== Темная тема ===== */
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #e4e4e4;
+    --text-secondary: #a0a0a0;
+    --border-color: #404040;
+    --hover-bg: #3a3a3a;
+    
+    --primary-color: #4c8fff;
+    --primary-hover: #3d7fe6;
+    --secondary-color: #6c757d;
+    
+    --success-bg: #1e4620;
+    --success-color: #75b798;
+    --danger-bg: #5c1e23;
+    --danger-color: #f8b4bc;
+    --info-bg: #1e3a5f;
+    --info-color: #9ec5fe;
+    
+    --danger-color: #f85c70;
+    --danger-hover: #e04555;
+}
+
+/* ===== Кибердизайн тема ===== */
+[data-theme="cyber"] {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #1a1f3a;
+    --text-primary: #00ffff;
+    --text-secondary: #00cccc;
+    --border-color: #00ffff;
+    --hover-bg: #2a2f4a;
+    
+    --primary-color: #ff00ff;
+    --primary-hover: #cc00cc;
+    --secondary-color: #00ff00;
+    
+    --success-bg: #1a2f1a;
+    --success-color: #00ff00;
+    --danger-bg: #3a1a2a;
+    --danger-color: #ff0066;
+    --info-bg: #1a2a3a;
+    --info-color: #00ffff;
+    
+    --danger-color: #ff0066;
+    --danger-hover: #cc0052;
+}
+
+/* Дополнительные эффекты для кибердизайна */
+[data-theme="cyber"] * {
+    text-shadow: 0 0 2px currentColor;
+}
+
+[data-theme="cyber"] .header,
+[data-theme="cyber"] .footer {
+    border-color: var(--border-color);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    position: relative;
+}
+
+[data-theme="cyber"] .header::before,
+[data-theme="cyber"] .footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+    animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+[data-theme="cyber"] .btn-primary {
+    background: linear-gradient(135deg, #ff00ff, #00ffff);
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+    }
+}
+
+[data-theme="cyber"] .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+    transform: scale(1.05);
+}
+
+[data-theme="cyber"] .post-card,
+[data-theme="cyber"] .post-item,
+[data-theme="cyber"] .user-card {
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    position: relative;
+}
+
+[data-theme="cyber"] .post-card::after,
+[data-theme="cyber"] .post-item::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+[data-theme="cyber"] .post-card:hover::after,
+[data-theme="cyber"] .post-item:hover::after {
+    opacity: 1;
+    animation: borderGlow 1.5s linear infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+[data-theme="cyber"] input,
+[data-theme="cyber"] textarea,
+[data-theme="cyber"] select {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+[data-theme="cyber"] input:focus,
+[data-theme="cyber"] textarea:focus,
+[data-theme="cyber"] select:focus {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    border-color: var(--primary-color);
+}
+
+/* Мигающий курсор для кибертемы */
+[data-theme="cyber"] input:focus,
+[data-theme="cyber"] textarea:focus {
+    caret-color: #ff00ff;
+}
+
+/* Эффект глитча для заголовков в кибертеме */
+[data-theme="cyber"] h1,
+[data-theme="cyber"] h2,
+[data-theme="cyber"] h3 {
+    position: relative;
+}
+
+[data-theme="cyber"] h1:hover,
+[data-theme="cyber"] h2:hover,
+[data-theme="cyber"] h3:hover {
+    animation: glitch 0.3s ease;
+}
+
+@keyframes glitch {
+    0%, 100% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(2px, -2px);
+    }
+    60% {
+        transform: translate(-2px, -2px);
+    }
+    80% {
+        transform: translate(2px, 2px);
+    }
+}
+
+/* Неоновая подсветка для тегов в кибертеме */
+[data-theme="cyber"] .tag-badge,
+[data-theme="cyber"] .tag-mini {
+    background: linear-gradient(135deg, #ff00ff40, #00ffff40);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+[data-theme="cyber"] .tag-badge:hover,
+[data-theme="cyber"] .tag-mini:hover {
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+    transform: scale(1.1);
+}
+
+/* Scrollbar styling */
+[data-theme="dark"]::-webkit-scrollbar,
+[data-theme="cyber"]::-webkit-scrollbar {
+    width: 10px;
+}
+
+[data-theme="dark"]::-webkit-scrollbar-track,
+[data-theme="cyber"]::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"]::-webkit-scrollbar-thumb,
+[data-theme="cyber"]::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+[data-theme="dark"]::-webkit-scrollbar-thumb:hover,
+[data-theme="cyber"]::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+}
+

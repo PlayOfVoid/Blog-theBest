@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Мои подписки - TechBlog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="subscriptions-page">
+        <h1>Мои подписки</h1>
+        
+        {% if subscriptions %}
+            <div class="users-grid">
+                {% for subscription in subscriptions %}
+                    <div class="user-card">
+                        <a href="{% url 'users:profile' subscription.author.username %}" class="user-card-link">
+                            {% if subscription.author.profile.avatar %}
+                                <img src="{{ subscription.author.profile.avatar.url }}" 
+                                     alt="{{ subscription.author.username }}" 
+                                     class="user-avatar">
+                            {% else %}
+                                <div class="user-avatar-placeholder">
+                                    {{ subscription.author.username.0|upper }}
+                                </div>
+                            {% endif %}
+                            
+                            <h3 class="user-name">{{ subscription.author.username }}</h3>
+                            
+                            <div class="user-stats">
+                                <div class="user-stat">
+                                    <span class="stat-value">{{ subscription.author.posts.count }}</span>
+                                    <span class="stat-label">Постов</span>
+                                </div>
+                                <div class="user-stat">
+                                    <span class="stat-value">{{ subscription.author.subscribers.count }}</span>
+                                    <span class="stat-label">Подписчиков</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>У вас пока нет подписок</p>
+                <a href="{% url 'blog:posts_list' %}" class="btn btn-primary">Найти авторов</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

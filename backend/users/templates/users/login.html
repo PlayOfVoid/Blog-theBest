@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вход - TechBlog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">Вход</h1>
+            <p class="auth-subtitle">Войдите в свой аккаунт</p>
+
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">
+                        Имя пользователя
+                    </label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="form-errors">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}" class="form-label">
+                        Пароль
+                    </label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="form-errors">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Войти
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Нет аккаунта? <a href="{% url 'users:register' %}">Зарегистрироваться</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

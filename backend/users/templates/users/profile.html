@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ profile_user.username }} - TechBlog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-page">
+        <!-- Шапка профиля -->
+        <div class="profile-header">
+            <div class="profile-avatar-section">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="{{ profile_user.username }}" class="profile-avatar">
+                {% else %}
+                    <div class="profile-avatar-placeholder">
+                        {{ profile_user.username.0|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-main">
+                    <h1 class="profile-username">{{ profile_user.username }}</h1>
+                    {% if profile_user.first_name or profile_user.last_name %}
+                        <p class="profile-fullname">{{ profile_user.first_name }} {{ profile_user.last_name }}</p>
+                    {% endif %}
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">{{ profile_user.posts.count }}</span>
+                            <span class="stat-label">Постов</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">{{ profile.get_followers_count }}</span>
+                            <span class="stat-label">Подписчиков</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">{{ profile.get_total_likes }}</span>
+                            <span class="stat-label">Лайков</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    {% if user == profile_user %}
+                        <a href="{% url 'users:settings' %}" class="btn btn-primary">Редактировать профиль</a>
+                    {% elif user.is_authenticated %}
+                        <button class="btn btn-primary subscribe-btn {% if is_subscribed %}subscribed{% endif %}"
+                                data-username="{{ profile_user.username }}"
+                                id="subscribeBtn">
+                            <span class="subscribe-text">
+                                {% if is_subscribed %}Отписаться{% else %}Подписаться{% endif %}
+                            </span>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Дополнительная информация -->
+        <div class="profile-details">
+            {% if profile.bio %}
+                <div class="profile-bio">
+                    <h3>О себе</h3>
+                    <p>{{ profile.bio|linebreaks }}</p>
+                </div>
+            {% endif %}
+            
+            <div class="profile-meta">
+                {% if profile.location %}
+                    <div class="meta-item">
+                        <span class="meta-icon">📍</span>
+                        <span>{{ profile.location }}</span>
+                    </div>
+                {% endif %}
+                {% if profile.website %}
+                    <div class="meta-item">
+                        <span class="meta-icon">🔗</span>
+                        <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">
+                            {{ profile.website }}
+                        </a>
+                    </div>
+                {% endif %}
+                <div class="meta-item">
+                    <span class="meta-icon">📅</span>
+                    <span>На сайте с {{ profile_user.date_joined|date:"F Y" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Посты пользователя -->
+        <div class="profile-posts">
+            <h2 class="section-title">Посты автора</h2>
+            
+            {% if page_obj %}
+                <div class="posts-list">
+                    {% for post in page_obj %}
+                        <article class="post-item">
+                            <div class="post-item-header">
+                                <span class="post-date">{{ post.created_at|date:"d F Y" }}</span>
+                            </div>
+                            
+                            <div class="post-item-body">
+                                <h3 class="post-title">
+                                    <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+                                </h3>
+                                <p class="post-excerpt">{{ post.content|truncatewords:50|striptags }}</p>
+                                
+                                {% if post.tags.all %}
+                                    <div class="post-tags">
+                                        {% for tag in post.tags.all %}
+                                            <a href="{% url 'blog:tag_posts' tag.slug %}" class="tag-mini">{{ tag.name }}</a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="post-item-footer">
+                                <div class="post-stats">
+                                    <span class="stat">
+                                        <span class="stat-icon">👁</span> {{ post.views }}
+                                    </span>
+                                    <span class="stat">
+                                        <span class="stat-icon">❤️</span> {{ post.total_likes }}
+                                    </span>
+                                    <span class="stat">
+                                        <span class="stat-icon">💬</span> {{ post.comments.count }}
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <!-- Пагинация -->
+                {% if page_obj.has_other_pages %}
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn">‹ Предыдущая</a>
+                        {% endif %}
+                        
+                        <span class="pagination-info">
+                            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                        </span>
+                        
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn">Следующая ›</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="empty-state">
+                    <p>Пока нет постов</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/subscribe.js' %}"></script>
+{% endblock %}
+
