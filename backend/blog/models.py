@@ -34,3 +34,19 @@ class Comment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
+
+
+class Subscribe(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribes')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribers')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='subscribes')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+
