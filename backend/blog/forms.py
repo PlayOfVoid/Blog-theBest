@@ -33,20 +33,20 @@ class PostForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         
-        # Обрабатываем новые теги
-        new_tags_str = self.cleaned_data.get('new_tags', '')
-        if new_tags_str:
-            new_tag_names = [tag.strip() for tag in new_tags_str.split(',') if tag.strip()]
-            for tag_name in new_tag_names:
-                tag, created = Tag.objects.get_or_create(
-                    name=tag_name,
-                    defaults={'slug': slugify(tag_name)}
-                )
-                instance.tags.add(tag)
-        
         if commit:
             instance.save()
             self.save_m2m()
+            
+            # Обрабатываем новые теги после сохранения
+            new_tags_str = self.cleaned_data.get('new_tags', '')
+            if new_tags_str:
+                new_tag_names = [tag.strip() for tag in new_tags_str.split(',') if tag.strip()]
+                for tag_name in new_tag_names:
+                    tag, created = Tag.objects.get_or_create(
+                        name=tag_name,
+                        defaults={'slug': slugify(tag_name)}
+                    )
+                    instance.tags.add(tag)
         
         return instance
 
