@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Создать пост - TechBlog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-page">
+        <div class="form-header">
+            <h1>Создать новый пост</h1>
+            <p class="form-subtitle">Поделитесь своими мыслями с сообществом</p>
+        </div>
+
+        <form method="post" class="post-form" id="postForm">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}" class="form-label">
+                    Заголовок <span class="required">*</span>
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="form-errors">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.content.id_for_label }}" class="form-label">
+                    Содержание <span class="required">*</span>
+                </label>
+                <div class="markdown-help">
+                    <button type="button" class="btn-text" id="markdownGuideBtn">
+                        📖 Справка по Markdown
+                    </button>
+                </div>
+                {{ form.content }}
+                {% if form.content.errors %}
+                    <div class="form-errors">{{ form.content.errors }}</div>
+                {% endif %}
+                <small class="form-help">Вы можете использовать Markdown для форматирования текста</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Теги</label>
+                <div class="tags-selection">
+                    {{ form.tags }}
+                </div>
+                {% if form.tags.errors %}
+                    <div class="form-errors">{{ form.tags.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.new_tags.id_for_label }}" class="form-label">
+                    Новые теги
+                </label>
+                {{ form.new_tags }}
+                {% if form.new_tags.errors %}
+                    <div class="form-errors">{{ form.new_tags.errors }}</div>
+                {% endif %}
+                <small class="form-help">{{ form.new_tags.help_text }}</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">Опубликовать</button>
+                <a href="{% url 'blog:posts_list' %}" class="btn btn-outline btn-lg">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно с справкой по Markdown -->
+<div class="modal" id="markdownGuideModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Справка по Markdown</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="markdown-guide">
+                <h4>Заголовки</h4>
+                <pre># Заголовок 1
+## Заголовок 2
+### Заголовок 3</pre>
+
+                <h4>Форматирование текста</h4>
+                <pre>**Жирный текст**
+*Курсив*
+~~Зачеркнутый~~</pre>
+
+                <h4>Списки</h4>
+                <pre>- Элемент списка
+- Другой элемент
+  - Вложенный элемент
+
+1. Нумерованный список
+2. Второй элемент</pre>
+
+                <h4>Ссылки и изображения</h4>
+                <pre>[Текст ссылки](https://example.com)
+![Описание изображения](url-изображения)</pre>
+
+                <h4>Код</h4>
+                <pre>`inline код`
+
+```python
+# Блок кода
+def hello():
+    print("Hello, World!")
+```</pre>
+
+                <h4>Цитаты</h4>
+                <pre>> Это цитата
+> Может быть многострочной</pre>
+
+                <h4>Таблицы</h4>
+                <pre>| Заголовок 1 | Заголовок 2 |
+|-------------|-------------|
+| Ячейка 1    | Ячейка 2    |</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/markdown-editor.js' %}"></script>
+{% endblock %}
+

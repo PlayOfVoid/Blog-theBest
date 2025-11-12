@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #0d6efd; color: white; padding: 20px; text-align: center; }
+        .content { background: #f8f9fa; padding: 20px; margin: 20px 0; }
+        .button { display: inline-block; padding: 10px 20px; background: #0d6efd; color: white; text-decoration: none; border-radius: 5px; }
+        .footer { text-align: center; color: #6c757d; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 TechBlog</h1>
+        </div>
+        
+        <div class="content">
+            <h2>❤️ Новый лайк!</h2>
+            <p>Привет, {{ author.username }}!</p>
+            <p><strong>{{ liker.username }}</strong> лайкнул ваш пост "<strong>{{ post.title }}</strong>"</p>
+            <p>Ваш контент нравится людям! 🎉</p>
+            <p>
+                <a href="{{ post.get_absolute_url }}" class="button">Посмотреть пост</a>
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>Вы получили это письмо, потому что включены email уведомления.</p>
+            <p><a href="/users/settings/">Изменить настройки уведомлений</a></p>
+        </div>
+    </div>
+</body>
+</html>
+

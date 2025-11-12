@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная - TechBlog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">Добро пожаловать в TechBlog</h1>
+        <p class="hero-subtitle">Место, где технологии встречаются с идеями</p>
+        {% if not user.is_authenticated %}
+            <div class="hero-actions">
+                <a href="{% url 'users:register' %}" class="btn btn-primary btn-lg">Присоединиться</a>
+                <a href="{% url 'blog:posts_list' %}" class="btn btn-outline btn-lg">Читать посты</a>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Популярные теги -->
+    {% if popular_tags %}
+    <section class="popular-tags">
+        <h2 class="section-title">Популярные теги</h2>
+        <div class="tags-cloud">
+            {% for tag in popular_tags %}
+                <a href="{% url 'blog:tag_posts' tag.slug %}" class="tag-badge">
+                    {{ tag.name }} <span class="tag-count">{{ tag.post_count }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Последние посты -->
+    <section class="recent-posts">
+        <div class="section-header">
+            <h2 class="section-title">Последние посты</h2>
+            <a href="{% url 'blog:posts_list' %}" class="btn btn-text">Все посты →</a>
+        </div>
+        
+        {% if recent_posts %}
+            <div class="posts-grid">
+                {% for post in recent_posts %}
+                    <article class="post-card">
+                        <div class="post-card-header">
+                            <div class="post-author">
+                                {% if post.author.profile.avatar %}
+                                    <img src="{{ post.author.profile.avatar.url }}" alt="{{ post.author.username }}" class="avatar-sm">
+                                {% else %}
+                                    <span class="avatar-placeholder avatar-sm">{{ post.author.username.0|upper }}</span>
+                                {% endif %}
+                                <div class="author-info">
+                                    <a href="{% url 'users:profile' post.author.username %}" class="author-name">{{ post.author.username }}</a>
+                                    <span class="post-date">{{ post.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-card-body">
+                            <h3 class="post-title">
+                                <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+                            </h3>
+                            <p class="post-excerpt">{{ post.content|truncatewords:30|striptags }}</p>
+                        </div>
+                        
+                        <div class="post-card-footer">
+                            <div class="post-tags">
+                                {% for tag in post.tags.all|slice:":3" %}
+                                    <a href="{% url 'blog:tag_posts' tag.slug %}" class="tag-mini">{{ tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                            <div class="post-stats">
+                                <span class="stat">
+                                    <span class="stat-icon">👁</span> {{ post.views }}
+                                </span>
+                                <span class="stat">
+                                    <span class="stat-icon">❤️</span> {{ post.total_likes }}
+                                </span>
+                                <span class="stat">
+                                    <span class="stat-icon">💬</span> {{ post.comments.count }}
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Пока нет постов</p>
+            </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
+

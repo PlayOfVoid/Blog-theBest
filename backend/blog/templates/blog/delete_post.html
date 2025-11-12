@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить пост - TechBlog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="confirm-page">
+        <div class="confirm-card">
+            <h1>Удалить пост?</h1>
+            <p class="confirm-message">Вы уверены, что хотите удалить пост "<strong>{{ post.title }}</strong>"?</p>
+            <p class="confirm-warning">Это действие нельзя отменить.</p>
+            
+            <form method="post" class="confirm-form">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger btn-lg">Да, удалить</button>
+                    <a href="{% url 'blog:post_detail' post.pk %}" class="btn btn-outline btn-lg">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

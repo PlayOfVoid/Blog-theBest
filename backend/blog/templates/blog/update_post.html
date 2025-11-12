@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Редактировать пост - TechBlog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-page">
+        <div class="form-header">
+            <h1>Редактировать пост</h1>
+        </div>
+
+        <form method="post" class="post-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}" class="form-label">
+                    Заголовок <span class="required">*</span>
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="form-errors">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.content.id_for_label }}" class="form-label">
+                    Содержание <span class="required">*</span>
+                </label>
+                {{ form.content }}
+                {% if form.content.errors %}
+                    <div class="form-errors">{{ form.content.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Теги</label>
+                {{ form.tags }}
+                {% if form.tags.errors %}
+                    <div class="form-errors">{{ form.tags.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.new_tags.id_for_label }}" class="form-label">
+                    Новые теги
+                </label>
+                {{ form.new_tags }}
+                <small class="form-help">{{ form.new_tags.help_text }}</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">Сохранить изменения</button>
+                <a href="{% url 'blog:post_detail' post.pk %}" class="btn btn-outline btn-lg">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

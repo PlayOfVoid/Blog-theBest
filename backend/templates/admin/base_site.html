@@ -1,0 +1,76 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | TechBlog Admin{% endblock %}
+
+{% block branding %}
+<div class="admin-branding" id="admin-branding">
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+            <span class="admin-logo">📝</span> TechBlog Admin
+        </a>
+    </h1>
+    
+    {% if user.is_authenticated %}
+    <div class="admin-user-info">
+        <span class="admin-username">{{ user.username }}</span>
+        <button type="button" class="admin-theme-toggle" id="adminThemeToggle" title="Переключить тему">
+            <span class="theme-icon">🌓</span>
+        </button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin-custom.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+// Управление темой для админки
+document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.getElementById('adminThemeToggle');
+    const htmlElement = document.documentElement;
+    
+    // Получаем сохраненную тему из localStorage
+    let currentTheme = localStorage.getItem('admin-theme') || 'light';
+    htmlElement.setAttribute('data-admin-theme', currentTheme);
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const themes = ['light', 'dark', 'cyber'];
+            const currentIndex = themes.indexOf(currentTheme);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            currentTheme = themes[nextIndex];
+            
+            htmlElement.setAttribute('data-admin-theme', currentTheme);
+            localStorage.setItem('admin-theme', currentTheme);
+            
+            // Обновляем иконку
+            const icon = this.querySelector('.theme-icon');
+            if (currentTheme === 'dark') {
+                icon.textContent = '🌙';
+            } else if (currentTheme === 'cyber') {
+                icon.textContent = '⚡';
+            } else {
+                icon.textContent = '☀️';
+            }
+        });
+        
+        // Устанавливаем начальную иконку
+        const icon = themeToggle.querySelector('.theme-icon');
+        if (currentTheme === 'dark') {
+            icon.textContent = '🌙';
+        } else if (currentTheme === 'cyber') {
+            icon.textContent = '⚡';
+        } else {
+            icon.textContent = '☀️';
+        }
+    }
+});
+</script>
+{% endblock %}
+

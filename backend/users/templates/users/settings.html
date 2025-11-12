@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Настройки - TechBlog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="settings-page">
+        <h1>Настройки аккаунта</h1>
+        
+        <form method="post" enctype="multipart/form-data" class="settings-form">
+            {% csrf_token %}
+            
+            <!-- Основная информация -->
+            <section class="settings-section">
+                <h2 class="settings-section-title">Основная информация</h2>
+                
+                <div class="form-group">
+                    <label for="{{ user_form.username.id_for_label }}" class="form-label">
+                        Имя пользователя
+                    </label>
+                    {{ user_form.username }}
+                    {% if user_form.username.errors %}
+                        <div class="form-errors">{{ user_form.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ user_form.email.id_for_label }}" class="form-label">
+                        Email
+                    </label>
+                    {{ user_form.email }}
+                    {% if user_form.email.errors %}
+                        <div class="form-errors">{{ user_form.email.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ user_form.first_name.id_for_label }}" class="form-label">
+                            Имя
+                        </label>
+                        {{ user_form.first_name }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ user_form.last_name.id_for_label }}" class="form-label">
+                            Фамилия
+                        </label>
+                        {{ user_form.last_name }}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Профиль -->
+            <section class="settings-section">
+                <h2 class="settings-section-title">Профиль</h2>
+                
+                <div class="form-group">
+                    <label for="{{ profile_form.bio.id_for_label }}" class="form-label">
+                        О себе
+                    </label>
+                    {{ profile_form.bio }}
+                    {% if profile_form.bio.errors %}
+                        <div class="form-errors">{{ profile_form.bio.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ profile_form.location.id_for_label }}" class="form-label">
+                        Местоположение
+                    </label>
+                    {{ profile_form.location }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ profile_form.website.id_for_label }}" class="form-label">
+                        Веб-сайт
+                    </label>
+                    {{ profile_form.website }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ profile_form.avatar.id_for_label }}" class="form-label">
+                        Аватар
+                    </label>
+                    {% if user.profile.avatar %}
+                        <div class="current-avatar">
+                            <img src="{{ user.profile.avatar.url }}" alt="Current avatar" class="avatar-preview">
+                        </div>
+                    {% endif %}
+                    {{ profile_form.avatar }}
+                    {% if profile_form.avatar.errors %}
+                        <div class="form-errors">{{ profile_form.avatar.errors }}</div>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- Настройки сайта -->
+            <section class="settings-section">
+                <h2 class="settings-section-title">Настройки отображения</h2>
+                
+                <div class="form-group">
+                    <label for="{{ settings_form.theme.id_for_label }}" class="form-label">
+                        Тема оформления
+                    </label>
+                    {{ settings_form.theme }}
+                    <small class="form-help">Выберите тему оформления сайта</small>
+                </div>
+
+                <div class="form-group-checkbox">
+                    {{ settings_form.sound_enabled }}
+                    <label for="{{ settings_form.sound_enabled.id_for_label }}" class="form-label-inline">
+                        Включить звуковые эффекты
+                    </label>
+                </div>
+
+                <div class="form-group-checkbox">
+                    {{ settings_form.email_notifications }}
+                    <label for="{{ settings_form.email_notifications.id_for_label }}" class="form-label-inline">
+                        Получать уведомления на email
+                    </label>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">Сохранить изменения</button>
+                <a href="{% url 'users:profile' user.username %}" class="btn btn-outline btn-lg">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

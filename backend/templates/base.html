@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru" data-theme="{{ request.user.settings.theme|default:'light' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Блог{% endblock %}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/themes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/posts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profiles.css' %}">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+</head>
+<body>
+    <!-- Header / Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <a href="{% url 'blog:index' %}" class="logo">
+                        <span class="logo-icon">📝</span>
+                        <span class="logo-text">TechBlog</span>
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <div class="navbar-menu" id="navbarMenu">
+                    <ul class="navbar-nav">
+                        <li><a href="{% url 'blog:index' %}" class="nav-link">Главная</a></li>
+                        <li><a href="{% url 'blog:posts_list' %}" class="nav-link">Посты</a></li>
+                        <li><a href="{% url 'blog:search' %}" class="nav-link">Поиск</a></li>
+                        
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'blog:create_post' %}" class="nav-link">Создать пост</a></li>
+                        {% endif %}
+                    </ul>
+                    
+                    <div class="navbar-account">
+                        {% if user.is_authenticated %}
+                            <div class="account-dropdown">
+                                <button class="account-btn" id="accountBtn">
+                                    {% if user.profile.avatar %}
+                                        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar-sm">
+                                    {% else %}
+                                        <span class="avatar-placeholder">{{ user.username.0|upper }}</span>
+                                    {% endif %}
+                                    <span class="username-text">{{ user.username }}</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                </button>
+                                
+                                <div class="dropdown-menu" id="accountDropdown">
+                                    <a href="{% url 'users:profile' user.username %}" class="dropdown-item">Мой профиль</a>
+                                    <a href="{% url 'users:my_subscriptions' %}" class="dropdown-item">Подписки</a>
+                                    <a href="{% url 'users:my_subscribers' %}" class="dropdown-item">Подписчики</a>
+                                    <a href="{% url 'users:settings' %}" class="dropdown-item">Настройки</a>
+                                    <hr class="dropdown-divider">
+                                    {% if user.is_staff %}
+                                        <a href="{% url 'admin:index' %}" class="dropdown-item">Админ-панель</a>
+                                        <hr class="dropdown-divider">
+                                    {% endif %}
+                                    <a href="{% url 'users:logout' %}" class="dropdown-item">Выйти</a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'users:login' %}" class="btn btn-outline">Войти</a>
+                            <a href="{% url 'users:register' %}" class="btn btn-primary">Регистрация</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Сообщения -->
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                    <button class="alert-close">&times;</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 TechBlog. Все права защищены.</p>
+                <div class="footer-links">
+                    <a href="#">О нас</a>
+                    <a href="#">Контакты</a>
+                    <a href="#">Правила</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/sounds.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Передача настроек пользователя в JS -->
+    <script>
+        window.userSettings = {
+            soundEnabled: {{ request.user.settings.sound_enabled|default:'true'|lower }},
+            theme: '{{ request.user.settings.theme|default:"light" }}'
+        };
+    </script>
+</body>
+</html>
+

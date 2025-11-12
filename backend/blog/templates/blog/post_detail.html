@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static markdown_extras %}
+
+{% block title %}{{ post.title }} - TechBlog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/markdown.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <article class="post-detail">
+        <!-- Header поста -->
+        <header class="post-detail-header">
+            <h1 class="post-detail-title">{{ post.title }}</h1>
+            
+            <div class="post-meta">
+                <div class="post-author-section">
+                    {% if post.author.profile.avatar %}
+                        <img src="{{ post.author.profile.avatar.url }}" alt="{{ post.author.username }}" class="avatar-lg">
+                    {% else %}
+                        <span class="avatar-placeholder avatar-lg">{{ post.author.username.0|upper }}</span>
+                    {% endif %}
+                    <div class="author-details">
+                        <a href="{% url 'users:profile' post.author.username %}" class="author-name">{{ post.author.username }}</a>
+                        <div class="post-timestamps">
+                            <span>Опубликовано: {{ post.created_at|date:"d F Y, H:i" }}</span>
+                            {% if post.updated_at != post.created_at %}
+                                <span>Обновлено: {{ post.updated_at|date:"d F Y, H:i" }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post-actions">
+                    {% if user.is_authenticated %}
+                        <button class="btn-icon like-btn {% if user_liked %}liked{% endif %}" 
+                                data-post-id="{{ post.pk }}"
+                                title="Лайк">
+                            <span class="icon">❤️</span>
+                            <span class="like-count">{{ post.total_likes }}</span>
+                        </button>
+                    {% else %}
+                        <span class="btn-icon">
+                            <span class="icon">❤️</span>
+                            <span>{{ post.total_likes }}</span>
+                        </span>
+                    {% endif %}
+                    
+                    <span class="btn-icon" title="Просмотры">
+                        <span class="icon">👁</span>
+                        <span>{{ post.views }}</span>
+                    </span>
+                    
+                    <span class="btn-icon" title="Комментарии">
+                        <span class="icon">💬</span>
+                        <span>{{ post.comments.count }}</span>
+                    </span>
+                    
+                    {% if user == post.author %}
+                        <a href="{% url 'blog:update_post' post.pk %}" class="btn btn-sm btn-outline">Редактировать</a>
+                        <a href="{% url 'blog:delete_post' post.pk %}" class="btn btn-sm btn-danger">Удалить</a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if post.tags.all %}
+                <div class="post-tags">
+                    {% for tag in post.tags.all %}
+                        <a href="{% url 'blog:tag_posts' tag.slug %}" class="tag-badge">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </header>
+
+        <!-- Содержание поста с Markdown -->
+        <div class="post-content markdown-body">
+            {{ post.content|markdown }}
+        </div>
+    </article>
+
+    <!-- Комментарии -->
+    <section class="comments-section">
+        <h2 class="comments-title">
+            Комментарии <span class="comments-count">({{ post.comments.count }})</span>
+        </h2>
+        
+        {% if user.is_authenticated %}
+            <div class="comment-form-wrapper">
+                <form method="post" class="comment-form" id="commentForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ comment_form.content }}
+                        {% if comment_form.content.errors %}
+                            <div class="form-errors">
+                                {{ comment_form.content.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить комментарий</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="auth-prompt">
+                <p><a href="{% url 'users:login' %}?next={{ request.path }}">Войдите</a>, чтобы оставить комментарий</p>
+            </div>
+        {% endif %}
+
+        <!-- Список комментариев -->
+        <div class="comments-list">
+            {% for comment in post.comments.all %}
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            {% if comment.author.profile.avatar %}
+                                <img src="{{ comment.author.profile.avatar.url }}" alt="{{ comment.author.username }}" class="avatar-sm">
+                            {% else %}
+                                <span class="avatar-placeholder avatar-sm">{{ comment.author.username.0|upper }}</span>
+                            {% endif %}
+                            <div class="comment-meta">
+                                <a href="{% url 'users:profile' comment.author.username %}" class="comment-author-name">
+                                    {{ comment.author.username }}
+                                </a>
+                                <span class="comment-date">{{ comment.created_at|date:"d.m.Y H:i" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-body">
+                        <p>{{ comment.content|linebreaks }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <p>Пока нет комментариев. Будьте первым!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/likes.js' %}"></script>
+{% endblock %}
+
